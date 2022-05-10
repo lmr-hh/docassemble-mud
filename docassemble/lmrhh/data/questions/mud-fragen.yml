@@ -57,8 +57,7 @@ question: Teilnahmegebühr
 subquestion: |
   Zur Durchführung der Tagung wird eine Teilnahmegebühr erhoben. Bitte
   überweisen Sie den Betrag entsprechend der Ihnen per E-Mail zugesandten
-  Rechnung.
-  
+  Rechnung.  
   Die Teilnahmegebühr wird bei Nichtteilnahme nicht erstattet.
 fields:
   - note: Die Teilnahmegebühr für die beträgt 150,00 €.
@@ -67,9 +66,15 @@ fields:
     js show if: val("discount")
   - Ich bin für eine Ermäßigung berechtigt: discount
     datatype: yesno
+  - note: |
+      Sie müssen einen Nachweis darüber erbringen, dass Sie für eine Ermäßigung
+      berechtigt sind. Sie können diesen Nachweis mit Ihrer Anmeldung hochladen
+      oder uns den Nachweis im Nachhinein zuschicken.
+    js show if: val("discount")
   - Nachweis über die Ermäßigung: discount_proof
     datatype: file
-    accept: image/jpeg, image/png, application/pdf
+    accept: "'image/jpeg, image/png, application/pdf'"
+    required: false
     js show if: val("discount")
 ---
 id: mud-2022/teilnahmebedingungen
@@ -83,7 +88,7 @@ subquestion:
   Klicken Sie [hier](/packagestatic/docassemble.mud/datenschutzhinweise.html),
   um die Datenschutzhinweise zu lesen.
 fields:
-  - ? Ich sichere zu, den Teilnahmebeitrag von {{ betrag }},00 € zeitnah zu
+  - ? Ich sichere zu, den Teilnahmebeitrag von ${ betrag },00 € zeitnah zu
       überweisen. Mir ist bewusst, dass eine Teilnahme an der Tagung nur nach
       erfolgter Zahlung möglich ist.
     : bedingungen.bezahlung
@@ -127,7 +132,7 @@ review:
     button: |
       ## Persönliche Daten
 
-      Sie haben folgende Daten angegeben. Die Teilnahmegebühr beträgt 25 €.
+      Sie haben folgende Daten angegeben.
 
       |Feld          |Ihre Angabe               |
       |--------------|--------------------------|
@@ -139,14 +144,14 @@ review:
   - Angaben ändern: Kosten
     button: |
       % if discount:
-      Es ist ein ermäßigter Teilnahmebeitrag von **{{ betrag }},00 €** fällig.
+      Es ist ein ermäßigter Teilnahmebeitrag von **${ betrag },00 €** fällig.
       % if discount_proof:
       Der Nachweis über die Ermäßigung wird mit der Anmeldung abgeschickt.
       % else:
       Den Nachweis über die Ermäßigung schicken Sie uns separat zu.
       % endif
       % else:
-      Es ist ein Teilnahmebeitrag von **{{ betrag }},00 €** fällig. Sie haben
+      Es ist ein Teilnahmebeitrag von **${ betrag },00 €** fällig. Sie haben
       keine Ermäßigung ausgewählt.
       % endif
   - Erneut ansehen: Teilnahmebedingungen
