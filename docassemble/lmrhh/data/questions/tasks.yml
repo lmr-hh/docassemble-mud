@@ -70,10 +70,10 @@ code: |
 
 ---
 code: rechnung_task = background_action('assemble_rechnung', 'refresh')
-need: [rechnungsnummer]
+need: [rechnungsnummer, rechnungsdatum]
 ---
 event: assemble_rechnung
-need: [rechnungsnummer]
+need: [rechnungsnummer, rechnungsdatum]
 code: |
   background_response_action(
     'set_variable',
@@ -162,7 +162,7 @@ code: |
   result = msgraph.upload_file(
     drive,
     folder,
-    "Ermäßigungsnachweis " + person.name + discount_proof.extension,
+    "Ermäßigungsnachweis " + str(person.name) + discount_proof.extension,
     open(discount_proof.path(), 'rb')
   ).json()
   if background:

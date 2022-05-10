@@ -97,8 +97,16 @@ fields:
       lambda x: x or validation_error('Sie müssen alle Teilnahmebedingungen akzeptieren.')
   - ? Ich erkläre mich damit einverstanden, dass im Rahmen der Vorbereitung der
       Tagung durch den Landesmusikrat Hamburg meine Kontaktdaten gespeichert und
-      zwecks Vorbereitung genutzt werden dürfen.
+      zwecks Vorbereitung, Durchführung und Nachbereitung der Tagung genutzt
+      werden dürfen.
     : bedingungen.daten
+    datatype: yesnowide
+    validate: >
+      lambda x: x or validation_error('Sie müssen alle Teilnahmebedingungen akzeptieren.')
+  - ? Ich nehme zur Kenntnis und erkläre mich damit einverstanden, dass während
+      der Tagung fotografische und Video-Aufnahme zur Dokumentation der Tagung
+      gemacht werden können, auf denen ich abgebildet sein könnte.
+    : bedingungen.fotos
     datatype: yesnowide
     validate: >
       lambda x: x or validation_error('Sie müssen alle Teilnahmebedingungen akzeptieren.')
