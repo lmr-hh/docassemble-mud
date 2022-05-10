@@ -44,7 +44,7 @@ code: |
       archive_registration_task,
       archive_invoice_task
   ]
-  if discount and defined('discount_proof'):
+  if discount and discount_proof:
     tasks.append(archive_discount_proof_task)
   if not all(task is None or task.ready() for task in tasks):
     Warten

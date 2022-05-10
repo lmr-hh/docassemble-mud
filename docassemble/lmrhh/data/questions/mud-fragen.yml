@@ -76,6 +76,9 @@ fields:
     accept: "'image/jpeg, image/png, application/pdf'"
     required: false
     js show if: val("discount")
+validation_code: |
+  if discount and not discount_proof:
+    discount_proof = None
 ---
 id: mud-2022/teilnahmebedingungen
 field: Teilnahmebedingungen
@@ -153,7 +156,7 @@ review:
     button: |
       % if discount:
       Es ist ein ermäßigter Teilnahmebeitrag von **${ betrag },00 €** fällig.
-      % if defined('discount_proof'):
+      % if discount_proof:
       Der Nachweis über die Ermäßigung wird mit der Anmeldung abgeschickt.
       % else:
       Den Nachweis über die Ermäßigung schicken Sie uns separat zu.
