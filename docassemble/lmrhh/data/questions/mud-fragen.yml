@@ -76,8 +76,8 @@ fields:
     accept: "'image/jpeg, image/png, application/pdf'"
     required: false
     js show if: val("discount")
-validation_code: |
-  if discount and not discount_proof:
+validation code: |
+  if not defined('discount_proof'):
     discount_proof = None
 ---
 id: mud-2022/teilnahmebedingungen
