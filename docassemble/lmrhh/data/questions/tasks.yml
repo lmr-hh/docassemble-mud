@@ -43,7 +43,7 @@ event: append_to_table
 need: [rechnungsnummer, msgraph]
 code: |
   background = interface() in {"worker", "cron"}
-  result = msgraph.add_able_data(
+  result = msgraph.add_table_data(
     daten["Anmeldungen"]["Bibliothek"],
     daten["Anmeldungen"]["Dokument"],
     daten["Anmeldungen"]["Tabelle"],
@@ -162,7 +162,7 @@ code: |
   result = msgraph.upload_file(
     drive,
     folder,
-    "Ermäßigungsnachweis " + str(person.name) + discount_proof.extension,
+    f"Ermäßigungsnachweis {str(person.name)}.{discount_proof[0].extension}",
     open(discount_proof.path(), 'rb')
   ).json()
   if background:
