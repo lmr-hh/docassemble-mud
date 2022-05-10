@@ -1,0 +1,131 @@
+---
+# Dieser Abschnitt sollte nicht verändert werden.
+include:
+  - data.yml
+  - mud-fragen.yml
+---
+# Die Metadaten konfigurieren das Erscheinungsbild der Anmeldungen (z.B. den
+# Titel). Mögliche Felder sind hier dokumentiert:
+# https://docassemble.org/docs/initial.html#metadata
+metadata:
+  title: Anmeldung zum Musik und Demenz Fachtagung am 16./17.09.2022
+  tab title: Anmeldung Musik und Demenz
+  short title: Musik und Demenz
+  logo: '<img src="https://cdn.lmr-hh.de/logos/lmrhh-inverted.svg" height="27">'
+  description:
+    Dies ist die Anmeldung zur Fachtagung Musik und Demenz am 16./17.09.2021.
+  exit url: https://www.lmr-hh.de
+  revision_date: 2022-05-10
+---
+# In diesem Abschnitt werden die Anmeldungen sowie die Automatisierung
+# konfiguriert. Die einzelnen Felder sind separat dokumentiert.
+variable name: daten
+data:
+  # Das Aktivieren des Testmodus verhindert, dass Anmeldungen automatisch
+  # archiviert werden. Stattdessen wird eine Zusammenfassung der Aktionen an die
+  # angegebene E-Mail geschickt, in der steht, was bei ausgeschaltetem
+  # Testmodus passiert wäre.
+  Testmodus: true
+
+  # Speichert alle angegebenen Daten automatisch ab. Daten werden in die Tabelle
+  # des Dokuments eingetragen. PDFs werden in den Ordner archiviert.
+  Anmeldungen:
+    Bibliothek:
+    Ordner:
+    Dokument:
+    Tabelle:
+
+  # Die hier angegebenen Personen erhalten automatisch eine Benachrichtigung,
+  # wenn eine Anmeldung abgeschickt wird.
+  E-Mail Benachrichtigung:
+    - henne@lmr-hh.de
+    - burmeister@lmr-hh.de
+    - kober@lmr-hh.de
+
+  # Dieses Mailgun Template wird zum Verschicken von E-Mails benutzt. Es sollte
+  # die Variable {{{ content }}} enthalten.
+  Mailgun Vorlage: lmr-anmeldung
+---
+code: |
+  betrag = 90 if discount else 150
+---
+code: |
+  key = "mud_rechnungsnummer"
+  if testmodus:
+    key = key + "_test"
+  with redis.lock(key + "-lock", timeout=5):
+    redis.set(key, 280, nx=True)
+    redis.incr(key)
+    rechnungsnummer = '2021' + str(redis.get(key).decode()).zfill(3)
+  if testmodus:
+    rechnungsnummer = rechnungsnummer + "-test"
+---
+code: |
+  rechnungsdatum = today()
+---
+# Das Anmeldeformular als PDF. Hier können Dateiname und -inhalt gesetzt werden.
+# Der variable name sowie die valid formats sollten nicht verändert werden.
+attachment:
+  name: Anmeldung ${ person.name }
+  # Dies ist der Dateiname, der u.A. im Mailanhang verwendet wird.
+  filename: Anmeldung ${ person.name }
+  # Dies ist der Dateiname des Templates. Diese Datei muss sich im `templates`
+  # Ordner befinden.
+  docx template file: Anmeldung.docx
+  # Die folgendne beiden Zeilen sollten nicht verändert werden
+  variable name: anmeldeformular
+  valid formats: [pdf]
+---
+attachment:
+  name: Rechnung ${ person.name }
+  filename: Rechnung ${ person.name }
+  docx template file: Rechnung.docx
+  variable name: rechnungsformular
+  valid formats: [pdf]
+---
+# Der Inhalt der E-Mail, die an neu angemeldete Mitglieder geschickt wird. Der
+# Wert von template sollte nicht verändert werden.
+template: person_email
+# Der E-Mail-Betreff
+subject: Ihre Anmeldung zur Fachtagung Musik und Demenz
+# Diese Datei enthält den Mailinhalt (die Datei befindet sich im `templates`
+# Ordner).
+content file: MuD E-Mail.md
+---
+# Der Inhalt der E-Mail, die als Benachrichtigung bei neuen Anmeldungen
+# versendet wird. Der Wert von template sollte nicht verändert werden.
+template: orga_email
+# Der E-Mail-Betreff
+subject: ${ person.name } hat sich zum MuD-Tagung angemeldet
+# Diese Datei enthält den Mailinhalt (die Datei befindet sich im `templates`
+# Ordner).
+content file: Benachrichtigung.md
+---
+template: testergebnis
+usedefs: [test_defs]
+content file: Testmodus.md
+---
+# Die Abschnitte der Anmeldung. In der fragen-Datei können Fragen diesen
+# Abschnitten zugeordnet werden.
+sections:
+  - Persönliche Daten
+  - Teilnahmegebühr
+  - Bedingungen
+  - Ihre Anmeldung
+---
+# Die Reihenfolge, in der Fragen gestellt werden. Dies ist eine erweiterte
+# Funktion, die nicht leichtfertig verändert werden sollte.
+mandatory: True
+code: |
+  # Anmeldefrist
+  Konfiguration
+  Kontaktdaten
+  Kosten
+  Teilnahmebedingungen
+  Kontrolle
+  Abschicken
+  if testmodus:
+    Testergebnisse
+  else:
+    Fertig
+---

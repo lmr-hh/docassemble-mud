@@ -1,0 +1,225 @@
+---
+# Sets a variable in the interview. This is used in the context of a
+# background_action_response.
+event: set_variable
+code: |
+  for name, value in action_arguments().items():
+    define(name, value)
+  background_response()
+---
+# The member_data forms is the data that is available to be put in spreadsheets.
+# The dictionary keys are compared to spreadsheet headings. The comparison is
+# case-insensitive.
+code: |
+  member_data = {
+    "Organisation": person.organisation,
+    "Vorname": person.name.first,
+    "Nachname": person.name.last,
+    "E-Mail": person.email,
+    "Telefonnummer": person.phone_number,
+    "Adresse": adresse(person),
+    "Newsletter": bedingungen.newsletter,
+    "Anmeldedatum": current_datetime(timezone="Europe/Berlin").format_datetime('d.M.YYYY HH:mm'),
+    "Rechnungsnummer": rechnungsnummer,
+    "Betrag": betrag,
+    "Ermäßigung": discount,
+    "Nachweis erbracht": "Ja" if discount_proof else "Nein"
+  }
+---
+# A task that adds a row to the Anmeldungen.
+need: [rechnungsnummer, msgraph]
+code: |
+  if testmodus:
+    save_data_task = None
+  else:
+    save_data_task = background_action(
+      'append_to_table',
+      'refresh',
+    )
+---
+# This action saves member_data to a table configured via global settings.
+event: append_to_table
+need: [rechnungsnummer, msgraph]
+code: |
+  background = interface() in {"worker", "cron"}
+  result = msgraph.add_able_data(
+    daten["Anmeldungen"]["Bibliothek"],
+    daten["Anmeldungen"]["Dokument"],
+    daten["Anmeldungen"]["Tabelle"],
+    member_data
+  ).json()
+  if background:
+    background_response(result)
+  else:
+    json_response(result)
+---
+
+---
+# A task that assembles the registration PDF.
+code: anmeldung_task = background_action('assemble_anmeldung', 'refresh')
+---
+# Assembles the registration pdf.
+event: assemble_anmeldung
+code: |
+  background_response_action(
+    'set_variable',
+    anmeldung=anmeldeformular
+  )
+---
+
+---
+code: rechnung_task = background_action('assemble_rechnung', 'refresh')
+need: [rechnungsnummer]
+---
+event: assemble_rechnung
+need: [rechnungsnummer]
+code: |
+  background_response_action(
+    'set_variable',
+    rechnung=rechnungsformular
+  )
+---
+# A task that archives the registration PDF to a folder.
+need: [anmeldung, msgraph]
+code: |
+  if testmodus:
+    archive_registration_task = None
+  else:
+    archive_registration_task = background_action(
+      'archive_registration',
+      'refresh'
+    )
+---
+# Archives the registration PDF to a folder. This action does not receive
+# arguments.
+event: archive_registration
+need: [anmeldung, msgraph]
+code: |
+  background = interface() in {"worker", "cron"}
+  drive = daten["Anmeldungen"]["Bibliothek"]
+  folder = daten["Anmeldungen"]["Ordner"]
+  result = msgraph.upload_file(
+    drive,
+    folder,
+    anmeldung.pdf.filename,
+    open(anmeldung.pdf.path(), 'rb')
+  ).json()
+  if background:
+    background_response(result)
+  else:
+    json_response(result)
+---
+
+---
+# A task that archives the invoice PDF to a folder.
+need: [rechnungsnummer, rechnung, msgraph]
+code: |
+  if testmodus:
+    archive_invoice_task = None
+  else:
+    archive_invoice_task = background_action('archive_invoice', 'refresh')
+---
+# Archives the invoice PDF to a folder. This action does not receive
+# arguments.
+event: archive_invoice
+need: [rechnungsnummer, rechnung, msgraph]
+code: |
+  background = interface() in {"worker", "cron"}
+  drive = daten["Anmeldungen"]["Bibliothek"]
+  folder = daten["Anmeldungen"]["Ordner"]
+  result = msgraph.upload_file(
+    drive,
+    folder,
+    rechnung.pdf.filename,
+    open(rechnung.pdf.path(), 'rb')
+  ).json()
+  if background:
+    background_response(result)
+  else:
+    json_response(result)
+---
+
+---
+# A task that archives the discount proof to a folder.
+need: [discount_proof, msgraph]
+code: |
+  if testmodus:
+    archive_discount_proof_task = None
+  else:
+    archive_discount_proof_task = background_action(
+      'archive_discount_proof',
+      'refresh'
+    )
+---
+# Archives the discount proof file. This action does not receive arguments.
+event: archive_discount_proof
+need: [discount_proof, msgraph]
+code: |
+  background = interface() in {"worker", "cron"}
+  drive = daten["Anmeldungen"]["Bibliothek"]
+  folder = daten["Anmeldungen"]["Ordner"]
+  result = msgraph.upload_file(
+    drive,
+    folder,
+    "Ermäßigungsnachweis " + person.name + discount_proof.extension,
+    open(discount_proof.path(), 'rb')
+  ).json()
+  if background:
+    background_response(result)
+  else:
+    json_response(result)
+---
+# Sends an email to the registered email address
+need: [rechnungsnummer, anmeldung, rechnung, mailgun]
+code: |
+  if testmodus:
+    member_email_task = None
+  else:
+    member_email_task = background_action('send_member_email', 'refresh')
+---
+# Sends an email to the registered email address.
+event: send_member_email
+need: [rechnungsnummer, anmeldung, rechnung, mailgun]
+code: |
+  background = interface() in {"worker", "cron"}
+  result = mailgun.send_email(
+    to=[person],
+    template=person_email,
+    attachments=[anmeldung.pdf, rechnung.pdf]
+  )
+  if background:
+    background_response(result)
+  else:
+    json_response(result)
+---
+
+---
+# Sends an email to the notification addresses.
+need: [mailgun]
+code: |
+  if testmodus:
+    orga_email_task = None
+  else:
+    orga_email_task = background_action('send_orga_email', 'refresh')
+---
+# Sends an email to the notification addresses.
+event: send_orga_email
+need: [mailgun]
+code: |
+  background = interface() in {"worker", "cron"}
+  recipients = daten["E-Mail Benachrichtigung"]
+  if isinstance(recipients, str):
+    recipients = [recipients]
+  if not recipients:
+    result = True
+  else:
+    to = [person] if testmodus else recipients
+    result = mailgun.send_email(
+      to=to,
+      template=orga_email
+    )
+  if background:
+    background_response(result)
+  else:
+    json_response(result)
+---

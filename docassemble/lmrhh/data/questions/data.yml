@@ -1,0 +1,62 @@
+---
+features:
+  navigation: true
+  hide navbar: false
+  hide standard menu: true
+  labels above fields: true
+  javascript: [actions.js]
+---
+objects:
+  person: Individual
+  bedingungen: DAObject
+  redis: DARedis
+---
+include:
+  - config.yml
+  - tasks.yml
+  - defs.yml
+---
+modules:
+  - .util
+---
+# Berechnet, ob die Teilnahmebedingungen akzeptiert wurden. Dies kann benutzt
+# werden, um ggf. die notwendige Frage nach den Bedingungen zu stellen, falls
+# bestimmte Bedingungen noch nicht akzeptiert sind.
+code: |
+  bedingungen.akzeptiert = all([
+    bedingungen.bezahlung,
+    bedingungen.daten,
+    bedingungen.datenschutz
+  ])
+---
+# Der Testmodus wird über einen URL-Parameter oder eine Konfigurationsvariable
+# festgelegt.
+code: testmodus = url_args.get('test', False) or daten.get("Testmodus", False)
+---
+# Startet alle Hintergrundaufgaben und aktiviert den Wartebildschirm, bis diese
+# beendet sind.
+code: |
+  tasks = [
+      save_data_task,
+      member_email_task,
+      orga_email_task,
+      archive_registration_task,
+      archive_invoice_task
+  ]
+  if discount and discount_proof:
+    tasks.append(archive_discount_proof_task)
+  if not all(task is None or task.ready() for task in tasks):
+    Warten
+  else:
+    Abschicken = True
+---
+# Wenn nach der Anmeldung gefragt wird, wird diese im Hintergrund erstellt.
+# Währenddessen wird ein Wartebildschirm gezeigt, Dies ist dazu da, dass der
+# "Absenden" Schritt einfach übersprungen werden kann.
+sets: anmeldung
+need: anmeldung_task
+code: Warten
+---
+sets: rechnung
+need: [rechnungsnummer, rechnung_task]
+code: Warten
