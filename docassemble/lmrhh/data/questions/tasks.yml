@@ -22,9 +22,10 @@ code: |
     "Anmeldedatum": current_datetime(timezone="Europe/Berlin").format_datetime('d.M.YYYY HH:mm'),
     "Rechnungsnummer": rechnungsnummer,
     "Betrag": betrag,
-    "Ermäßigung": discount,
-    "Nachweis erbracht": "Ja" if discount_proof else "Nein"
+    "Ermässigungsnachweis": "Nicht erforderlich"
   }
+  if discount:
+    member_data["Ermässigungsnachweis"] = "Ja" if discount_proof else "Nein"
 ---
 # A task that adds a row to the Anmeldungen.
 need: [rechnungsnummer, msgraph]

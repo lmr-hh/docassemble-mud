@@ -30,10 +30,10 @@ data:
   # Speichert alle angegebenen Daten automatisch ab. Daten werden in die Tabelle
   # des Dokuments eingetragen. PDFs werden in den Ordner archiviert.
   Anmeldungen:
-    Bibliothek:
-    Ordner:
-    Dokument:
-    Tabelle:
+    Bibliothek: b!irfVSIeamk2x3QoCyjo1nSL89XMR2F9MtpYy8ZkCvooW0mTd6lmzQIc9uJUAtP4v
+    Ordner: 01TRW33QK3ZI5M3YGGHRD2TMORAWQJXCB3
+    Dokument: 01TRW33QJDUVM7Y26YRZE2KX3PS756U7O3
+    Tabelle: "{8D9DB907-4FC4-4A4A-A843-0CCB5EAA702B}"
 
   # Die hier angegebenen Personen erhalten automatisch eine Benachrichtigung,
   # wenn eine Anmeldung abgeschickt wird.
