@@ -83,7 +83,7 @@ Das Anmeldeformular und die Rechnung werden automatisch in dem Ordner
 **${ ordner['name'] }** archiviert.
 % if not discount_proof:
 In der Anmeldung wurde kein Ermäßigungsnachweis hochgeladen.
-% else
+% else:
 Auch der Ermäßigungsnachweis wird in diesem Ordner archiviert.
 % endif
 
