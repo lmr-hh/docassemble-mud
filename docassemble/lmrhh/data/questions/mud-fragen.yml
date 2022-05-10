@@ -153,7 +153,7 @@ review:
     button: |
       % if discount:
       Es ist ein ermäßigter Teilnahmebeitrag von **${ betrag },00 €** fällig.
-      % if discount_proof:
+      % if defined('discount_proof'):
       Der Nachweis über die Ermäßigung wird mit der Anmeldung abgeschickt.
       % else:
       Den Nachweis über die Ermäßigung schicken Sie uns separat zu.

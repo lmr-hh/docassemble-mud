@@ -81,7 +81,7 @@ nur an die von dir angegebene Adresse `${ person.email }` gesendet.
 ### Archivieren der Anmeldung und Rechnung
 Das Anmeldeformular und die Rechnung werden automatisch in dem Ordner
 **${ ordner['name'] }** archiviert.
-% if not discount_proof:
+% if not defined('discount_proof'):
 In der Anmeldung wurde kein Ermäßigungsnachweis hochgeladen.
 % else:
 Auch der Ermäßigungsnachweis wird in diesem Ordner archiviert.
@@ -96,10 +96,12 @@ Auch der Ermäßigungsnachweis wird in diesem Ordner archiviert.
                        message="Die Rechnung wurde zum Ordner hinzugefügt.">
     Rechnung archivieren
   </%self:action_button>
+% if defined('discount_proof'):
   <%self:action_button action="archive_discount_proof"
                        message="Der Nachweis wurde zum Ordner hinzugefügt.">
     Ermäßigungsnachweis archivieren
   </%self:action_button>
+% endif
   <a class="btn btn-secondary btn-sm"
      target="_blank"
      href="${ ordner['webUrl'] }">Ordner öffnen</a>

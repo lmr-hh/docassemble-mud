@@ -4,7 +4,7 @@ vielen Dank für Ihre Anmeldung zur Fachtagung **Musik und Demenz – Online** d
 
 Bitte beachten Sie, dass Ihre Anmeldung erst gültig wird, nachdem Sie Ihre Rechnung bezahlt haben.
 
-%if discount and not discount_proof:
+%if discount and not defined('discount_proof'):
 Bedenken Sie außerdem, dass Sie noch einen Nachweis über Ihre Ermäßigungsberechtigung
 schicken müssen.
 %endif

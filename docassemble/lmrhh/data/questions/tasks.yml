@@ -25,7 +25,7 @@ code: |
     "Ermässigungsnachweis": "Nicht erforderlich"
   }
   if discount:
-    member_data["Ermässigungsnachweis"] = "Ja" if discount_proof else "Nein"
+    member_data["Ermässigungsnachweis"] = "Ja" if defined('discount_proof') else "Nein"
 ---
 # A task that adds a row to the Anmeldungen.
 need: [rechnungsnummer, msgraph]
