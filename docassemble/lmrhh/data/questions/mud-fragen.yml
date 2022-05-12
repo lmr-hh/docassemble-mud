@@ -58,14 +58,17 @@ subquestion: |
   Zur Durchführung der Tagung wird eine Teilnahmegebühr erhoben. Bitte
   überweisen Sie den Betrag entsprechend der Ihnen per E-Mail zugesandten
   Rechnung.  
-  Die Teilnahmegebühr wird bei Nichtteilnahme nicht erstattet.
+  Die Teilnahmebeitrag  wird bei Nichtteilnahme nicht erstattet.
 fields:
-  - note: Die Teilnahmegebühr für die beträgt 150,00 €.
+  - note: Die Teilnahmegebühr beträgt 150,00 €.
     js hide if: val("discount")
-  - note: Die Teilnahmegebühr für die beträgt 90,00 €.
+  - note: Die Teilnahmegebühr beträgt 90,00 €.
     js show if: val("discount")
   - Ich bin für eine Ermäßigung berechtigt: discount
     datatype: yesno
+  - note: |
+      Für eine Ermäßigung berechtigt sind Studierende, Auszubildende und
+      Rentner*innen.
   - note: |
       Sie müssen einen Nachweis darüber erbringen, dass Sie für eine Ermäßigung
       berechtigt sind. Sie können diesen Nachweis mit Ihrer Anmeldung hochladen

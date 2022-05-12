@@ -38,7 +38,6 @@ data:
   # Die hier angegebenen Personen erhalten automatisch eine Benachrichtigung,
   # wenn eine Anmeldung abgeschickt wird.
   E-Mail Benachrichtigung:
-    - henne@lmr-hh.de
     - burmeister@lmr-hh.de
     - kober@lmr-hh.de
 
