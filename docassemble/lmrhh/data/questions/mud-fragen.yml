@@ -67,8 +67,8 @@ fields:
   - Ich bin für eine Ermäßigung berechtigt: discount
     datatype: yesno
   - note: |
-      Für eine Ermäßigung berechtigt sind Studierende, Auszubildende und
-      Rentner*innen.
+      <small>Für eine Ermäßigung berechtigt sind Studierende, Auszubildende und
+      Rentner\*innen.</small>
   - note: |
       Sie müssen einen Nachweis darüber erbringen, dass Sie für eine Ermäßigung
       berechtigt sind. Sie können diesen Nachweis mit Ihrer Anmeldung hochladen
