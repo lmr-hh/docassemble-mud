@@ -52,11 +52,12 @@ code: |
   key = "mud_rechnungsnummer"
   if testmodus:
     key = key + "_test"
+  month = current_datetime(timezone="Europe/Berlin").format_datetime('M')
   with redis.lock(key + "-lock", timeout=5):
     redis.set(key, 250, nx=True)
     redis.incr(key)
     strval = str(redis.get(key).decode()).zfill(3)
-    rechnungsnummer = 'A-22-5-' + strval
+    rechnungsnummer = f"A-22-{month}-{strval}"
   if testmodus:
     rechnungsnummer = rechnungsnummer + "-test"
 ---
