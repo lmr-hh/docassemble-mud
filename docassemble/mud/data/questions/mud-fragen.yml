@@ -129,7 +129,7 @@ fields:
 id: mud-2022/kontrolle
 continue button field: Kontrolle
 section: Ihre Anmeldung
-question: Ihre Anmeldung zum Fachtagung Musik und Demenz
+question: Ihre Anmeldung zur Fachtagung Musik und Demenz
 review:
   - note: |
       % if testmodus:
