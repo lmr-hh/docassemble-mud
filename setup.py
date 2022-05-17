@@ -57,7 +57,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude,
 
 setup(
     name='docassemble.mud',
-    version='0.9.1',
+    version='0.9.2',
     description=__doc__,
     long_description=long_description(),
     long_description_content_type='text/markdown',

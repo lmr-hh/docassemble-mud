@@ -125,6 +125,13 @@ fields:
       über dessen Newsletter erhalten.
     : bedingungen.newsletter
     datatype: yesnowide
+css: |
+  <style>
+  .da-field-checkbox .da-has-error.invalid-feedback {
+    margin-top: -.5rem;
+    margin-bottom: .5rem;
+  }
+  </style>
 ---
 id: mud-2022/kontrolle
 continue button field: Kontrolle
