@@ -45,7 +45,7 @@ An die E-Mail sind die folgenden Dokumente angehängt:
 </p>
 
 <%self:collapse id="person-email-collapse" title="${ person_email.subject }">
-  ${ person_email }
+  ${ docassemble.base.filter.markdown_to_html(person_email) }
 </%self:collapse>
 
 ### Benachrichtigungs-E-Mail
@@ -74,7 +74,7 @@ nur an die von dir angegebene Adresse `${ person.email }` gesendet.
 </p>
 
 <%self:collapse id="orga-email-collapse" title="${ orga_email.subject }">
-  ${ orga_email }
+  ${ docassemble.base.filter.markdown_to_html(orga_email) }
 </%self:collapse>
 % endif
 
