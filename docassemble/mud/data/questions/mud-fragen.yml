@@ -58,7 +58,7 @@ subquestion: |
   Zur Durchführung der Tagung wird eine Teilnahmegebühr erhoben. Bitte
   überweisen Sie den Betrag entsprechend der Ihnen per E-Mail zugesandten
   Rechnung.  
-  Die Teilnahmebeitrag  wird bei Nichtteilnahme nicht erstattet.
+  Der Teilnahmebeitrag wird bei Nichtteilnahme nicht erstattet.
 fields:
   - note: Die Teilnahmegebühr beträgt 150,00 €.
     js hide if: val("discount")
