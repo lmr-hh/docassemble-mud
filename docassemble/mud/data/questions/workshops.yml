@@ -1,0 +1,197 @@
+---
+features:
+  navigation: false
+  hide navbar: false
+  hide standard menu: true
+  labels above fields: true
+  javascript: actions.js
+---
+metadata:
+  title: Workshopauswahl für die Fachtagung Musik und Demenz 2022
+  tab title: Workshopauswahl Musik und Demenz
+  short title: Workshops MuD
+  logo: '<img src="https://cdn.lmr-hh.de/logos/lmrhh-inverted.svg" height="27">'
+  description:
+    Diese Abfrage dient einer Evaluierung, welche Workshops bei der Fachtagung
+    Musik und Demenz am 16./17.09.2021 besonders gefragt sind.
+  exit url: https://www.lmr-hh.de
+  revision_date: 2022-08-30
+---
+include:
+  - config.yml
+---
+objects:
+  person: Individual
+---
+# In diesem Abschnitt werden die Anmeldungen sowie die Automatisierung
+# konfiguriert. Die einzelnen Felder sind separat dokumentiert.
+variable name: daten
+data:
+  Anmeldungen:
+    Bibliothek: b!irfVSIeamk2x3QoCyjo1nSL89XMR2F9MtpYy8ZkCvooW0mTd6lmzQIc9uJUAtP4v
+    Dokument: 01TRW33QKQLUOVDI7EVJGYBBU7YV335P7N
+    Tabelle: "{8D9DB907-4FC4-4A4A-A843-0CCB5EAA702B}"
+
+  Mailgun Vorlage: lmr-anmeldung
+---
+# This triggers the config check
+mandatory: true
+code: tabelle
+---
+code: |
+  workshops = {
+    "1a": ("Musik in der Pflege", "Silke Kammer"),
+    "1b": ("Kommunikationspuppen in der musikalischen Betreuung", "Martina Klimpel"),
+    "1c": ("Musikunterricht für ältere Erwachsene", "Dr. Sibylle Hoedt-Schmidt"),
+    "1d": ("Demenz und Musik Migration und Interkulturalität", "Friederike Frenzel"),
+    "1e": ("Rythmik schafft Beziehung", "Monika Mayr"),
+    "1f": ("Kooperation von Musikschulen und Alteneinrichtungen", "Markus Adam"),
+    "1g": ("Update Musik und Gehirn", "Prof. Artur C. Jaschke"),
+    "2c": ("Liederschreiben für und mit Menschen mit einer Demenz", "Jasmin Eickholt"),
+    "2d": ("Musiktherapie in der geriatrischen Pflege", "Judith Stritzker"),
+    "2e": ("Interaktive Konzerte gegen soziale Isolation", "Isabelle Vilmar"),
+    "2f": ("Anwendung der Vibroakustik-Therapie für Demenz", "Dr. Elsa Campbell"),
+    "2g": ("Saturday Night Fever – (nicht nur) für jüngere Pflegebedürftige", "Dr. Kerstin Jaunich"),
+    "3a": ("Musikalische Stimulation für Menschen mit schwerer Demenz", "Mirjam Blümel"),
+    "3b": ("Singen mit demenzerkrankten Menschen", "Prof. Dr. Kai Koch"),
+    "3d": ("Im Spannungsfeld Therapie – Geragogik – Kunst", "Prof. Dr. Dorothea Muthesius"),
+    "4g": ("Musik macht einen Unterschied! – Wirkungen von Musik", "Dr. Arthur Schall")
+  }
+  workshops["2a"] = workshops["1a"]
+  workshops["2b"] = workshops["1b"]
+  workshops["3c"] = workshops["1c"]
+  workshops["3d"] = workshops["2d"]
+  workshops["3e"] = workshops["2e"]
+  workshops["3f"] = workshops["1f"]
+  workshops["4a"] = workshops["3a"]
+  workshops["4b"] = workshops["3b"]
+  workshops["4c"] = workshops["2c"]
+  workshops["4d"] = workshops["1d"]
+  workshops["4e"] = workshops["1e"]
+  workshops["4f"] = workshops["2g"]
+---
+question: Workshopauswahl für die Fachtagung Musik und Demenz
+subquestion: |
+  Hallo,
+  
+  wir freuen uns sehr über Ihre Teilnahme an der Fachtagung Musik und Demenz. Um
+  eine Übersicht über das Interesse an den verschiedenen angebotenen Workshops
+  zu bekommen, möchten wir Sie bitten die folgende Umfrage auszufüllen.
+  
+  Bitte beachten Sie, dass bei großer Nachfrage nach einem Workshop ggf. nicht
+  alle Wünsche erfüllt werden können. Sollten Sie davon betroffen sein, werden
+  wir Sie rechtzeitig informieren.
+fields:
+  - Vorname: person.name.first
+  - Nachname: person.name.last
+  - E-Mail: person.email
+    datatype: email
+  - note: |
+      Es finden insgesamt 16 unterschiedliche Workshops statt, aus denen Sie in
+      4 Blöcken jeweils einen Workshop besuchen können. Eine Übersicht sowie
+      Beschreibungen zu allen Workshops finden sie unter folgendem Link:
+      
+      ${ action_button_html("/packagestatic/docassemble.mud/workshops.pdf", label="Workshopübersicht öffnen", new_window=True) }
+  - note: |
+      ### Workshop Block 1
+      
+      Der erste Workshop-Block findet am Freitag, 16. September von 14:00 Uhr
+      bis 14:15 Uhr statt.
+  - Workshop Block 1: workshop1
+    required: false
+    input type: dropdown
+    code: |
+      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops if key.startswith("1")}
+  - note: |
+      ### Workshop Block 2
+      
+      Der erste Workshop-Block findet am Freitag, 16. September von 15:45 Uhr
+      bis 17:00 Uhr statt.
+  - Workshop Block 2: workshop2
+    required: false
+    input type: dropdown
+    code: |
+      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops if key.startswith("2")}
+  - note: |
+      ### Workshop Block 3
+      
+      Der erste Workshop-Block findet am Samstag, 17. September von 11:15 Uhr
+      bis 12:30 Uhr statt.
+  - Workshop Block 3: workshop3
+    required: false
+    input type: dropdown
+    code: |
+      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops if key.startswith("3")}
+  - note: |
+      ### Workshop Block 4
+      
+      Der erste Workshop-Block findet am Freitag, 17. September von 13:30 Uhr
+      bis 14:45 Uhr statt.
+  - Workshop Block 4: workshop1
+    required: false
+    input type: dropdown
+    code: |
+      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops if key.startswith("4")}
+---
+need:
+  - msgraph
+  - mailgun
+  - confirmation_email
+code: |
+  data = {
+    "Name": person.name.full(),
+    "E-Mail": person.email,
+    "Workshop 1": workshop1,
+    "Workshop 2": workshop2,
+    "Workshop 3": workshop3,
+    "Workshop 4": workshop4,
+    "Anmeldedatum": current_datetime(timezone="Europe/Berlin").format_datetime('d.M.YYYY HH:mm'),
+  }
+  msgraph.add_table_data(
+    daten["Anmeldungen"]["Bibliothek"],
+    daten["Anmeldungen"]["Dokument"],
+    daten["Anmeldungen"]["Tabelle"],
+    data
+  ).json()
+  mailgun.send_email(
+    to=[person],
+    template=confirmation_email
+  )
+  Absenden = True
+---
+mandatory: true
+need:
+  - Absenden
+question: Vielen Dank
+subquestion: |
+  Vielen Dank für das Absenden Ihrer Präferenzen. Wir freuen uns darauf, Sie bei
+  der Tagung zu treffen.
+  
+  Viele Grüße  
+  Das Team "Musik und Demenz"
+buttons:
+  - Beenden: leave
+---
+template: confirmation_email
+subject: Ihre Workshop-Auswahl für die Fachtagung Musik und Demenz 2022
+content: |
+  Hallo ${ person.name.full() },
+  
+  Vielen Dank für das Absenden Ihrer Workshop-Auswahl für die Fachtagung Musik
+  und Demenz 2022. Sie haben folgende Angaben gemacht:
+  
+  % if workshop1:
+  - **Workshop Block 1**: ${ workshops[workshop1][0] } _(mit ${ workshops[workshop1][1] })_
+  % endif
+  % if workshop2:
+  - **Workshop Block 2**: ${ workshops[workshop2][0] } _(mit ${ workshops[workshop2][1] })_
+  % endif
+  % if workshop3:
+  - **Workshop Block 3**: ${ workshops[workshop3][0] } _(mit ${ workshops[workshop3][1] })_
+  % endif
+  % if workshop4:
+  - **Workshop Block 4**: ${ workshops[workshop4][0] } _(mit ${ workshops[workshop4][1] })_
+  % endif
+  
+  Viele Grüße  
+  Das Musik und Demenz Team
