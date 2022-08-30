@@ -72,6 +72,8 @@ code: |
   workshops["4f"] = workshops["2g"]
 ---
 question: Workshopauswahl für die Fachtagung Musik und Demenz
+pre: |
+  [FILE: mud.jpg, 100%, Musik und Demenz Banner]
 subquestion: |
   Hallo,
   
@@ -79,7 +81,7 @@ subquestion: |
   eine Übersicht über das Interesse an den verschiedenen angebotenen Workshops
   zu bekommen, möchten wir Sie bitten die folgende Umfrage auszufüllen.
   
-  Bitte beachten Sie, dass bei großer Nachfrage nach einem Workshop ggf. nicht
+  Bitte beachten Sie, dass bei großer Nachfrage nach einem Workshop ggfs. nicht
   alle Wünsche erfüllt werden können. Sollten Sie davon betroffen sein, werden
   wir Sie rechtzeitig informieren.
 fields:
@@ -106,7 +108,7 @@ fields:
   - note: |
       ### Workshop Block 2
       
-      Der erste Workshop-Block findet am Freitag, 16. September von 15:45 Uhr
+      Der zweite Workshop-Block findet am Freitag, 16. September von 15:45 Uhr
       bis 17:00 Uhr statt.
   - Workshop Block 2: workshop2
     required: false
@@ -116,7 +118,7 @@ fields:
   - note: |
       ### Workshop Block 3
       
-      Der erste Workshop-Block findet am Samstag, 17. September von 11:15 Uhr
+      Der dritte Workshop-Block findet am Samstag, 17. September von 11:15 Uhr
       bis 12:30 Uhr statt.
   - Workshop Block 3: workshop3
     required: false
@@ -126,7 +128,7 @@ fields:
   - note: |
       ### Workshop Block 4
       
-      Der erste Workshop-Block findet am Freitag, 17. September von 13:30 Uhr
+      Der vierte Workshop-Block findet am Samstag, 17. September von 13:30 Uhr
       bis 14:45 Uhr statt.
   - Workshop Block 4: workshop4
     required: false
