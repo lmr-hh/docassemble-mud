@@ -20,6 +20,10 @@ metadata:
 include:
   - config.yml
 ---
+# This triggers the config check
+mandatory: true
+code: need(tabelle)
+---
 objects:
   person: Individual
 ---
@@ -34,16 +38,13 @@ data:
 
   Mailgun Vorlage: lmr-anmeldung
 ---
-# This triggers the config check
-mandatory: true
-code: tabelle
----
 code: |
   workshops = {
+    "": ("", ""),
     "1a": ("Musik in der Pflege", "Silke Kammer"),
     "1b": ("Kommunikationspuppen in der musikalischen Betreuung", "Martina Klimpel"),
     "1c": ("Musikunterricht für ältere Erwachsene", "Dr. Sibylle Hoedt-Schmidt"),
-    "1d": ("Demenz und Musik Migration und Interkulturalität", "Friederike Frenzel"),
+    "1d": ("TBD", "N.N."),
     "1e": ("Rythmik schafft Beziehung", "Monika Mayr"),
     "1f": ("Kooperation von Musikschulen und Alteneinrichtungen", "Markus Adam"),
     "1g": ("Update Musik und Gehirn", "Prof. Artur C. Jaschke"),
@@ -91,7 +92,7 @@ fields:
       4 Blöcken jeweils einen Workshop besuchen können. Eine Übersicht sowie
       Beschreibungen zu allen Workshops finden sie unter folgendem Link:
       
-      ${ action_button_html("/packagestatic/docassemble.mud/workshops.pdf", label="Workshopübersicht öffnen", new_window=True) }
+      ${ action_button_html(url_of("workshops.pdf"), label="Workshopübersicht öffnen", new_window=True) }
   - note: |
       ### Workshop Block 1
       
@@ -101,7 +102,7 @@ fields:
     required: false
     input type: dropdown
     code: |
-      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops if key.startswith("1")}
+      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("1")}
   - note: |
       ### Workshop Block 2
       
@@ -111,7 +112,7 @@ fields:
     required: false
     input type: dropdown
     code: |
-      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops if key.startswith("2")}
+      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("2")}
   - note: |
       ### Workshop Block 3
       
@@ -121,17 +122,18 @@ fields:
     required: false
     input type: dropdown
     code: |
-      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops if key.startswith("3")}
+      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("3")}
   - note: |
       ### Workshop Block 4
       
       Der erste Workshop-Block findet am Freitag, 17. September von 13:30 Uhr
       bis 14:45 Uhr statt.
-  - Workshop Block 4: workshop1
+  - Workshop Block 4: workshop4
     required: false
     input type: dropdown
     code: |
-      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops if key.startswith("4")}
+      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("4")}
+continue button label: Absenden
 ---
 need:
   - msgraph
@@ -141,22 +143,24 @@ code: |
   data = {
     "Name": person.name.full(),
     "E-Mail": person.email,
-    "Workshop 1": workshop1,
-    "Workshop 2": workshop2,
-    "Workshop 3": workshop3,
-    "Workshop 4": workshop4,
+    "Workshop 1": workshops[workshop1][0],
+    "Workshop 2": workshops[workshop2][0],
+    "Workshop 3": workshops[workshop3][0],
+    "Workshop 4": workshops[workshop4][0],
     "Anmeldedatum": current_datetime(timezone="Europe/Berlin").format_datetime('d.M.YYYY HH:mm'),
   }
-  msgraph.add_table_data(
+  response = msgraph.add_table_data(
     daten["Anmeldungen"]["Bibliothek"],
     daten["Anmeldungen"]["Dokument"],
     daten["Anmeldungen"]["Tabelle"],
     data
-  ).json()
+  )
+  response.raise_for_status()
   mailgun.send_email(
     to=[person],
     template=confirmation_email
   )
+  del response, data
   Absenden = True
 ---
 mandatory: true
@@ -181,16 +185,28 @@ content: |
   und Demenz 2022. Sie haben folgende Angaben gemacht:
   
   % if workshop1:
-  - **Workshop Block 1**: ${ workshops[workshop1][0] } _(mit ${ workshops[workshop1][1] })_
+  - **Workshop Block 1**: ${ workshops[workshop1][0] }  
+    _(mit ${ workshops[workshop1][1] })_
+  % else:
+  - **Workshop Block 1**: _Keine Auswahl_
   % endif
   % if workshop2:
-  - **Workshop Block 2**: ${ workshops[workshop2][0] } _(mit ${ workshops[workshop2][1] })_
+  - **Workshop Block 2**: ${ workshops[workshop2][0] }  
+    _(mit ${ workshops[workshop2][1] })_
+    % else:
+  - **Workshop Block 2**: _Keine Auswahl_
   % endif
   % if workshop3:
-  - **Workshop Block 3**: ${ workshops[workshop3][0] } _(mit ${ workshops[workshop3][1] })_
+  - **Workshop Block 3**: ${ workshops[workshop3][0] }  
+    _(mit ${ workshops[workshop3][1] })_
+    % else:
+  - **Workshop Block 3**: _Keine Auswahl_
   % endif
   % if workshop4:
-  - **Workshop Block 4**: ${ workshops[workshop4][0] } _(mit ${ workshops[workshop4][1] })_
+  - **Workshop Block 4**: ${ workshops[workshop4][0] }  
+    _(mit ${ workshops[workshop4][1] })_
+    % else:
+  - **Workshop Block 4**: _Keine Auswahl_
   % endif
   
   Viele Grüße  
