@@ -44,7 +44,6 @@ code: |
     "1a": ("Musik in der Pflege", "Silke Kammer"),
     "1b": ("Kommunikationspuppen in der musikalischen Betreuung", "Martina Klimpel"),
     "1c": ("Musikunterricht für ältere Erwachsene", "Dr. Sibylle Hoedt-Schmidt"),
-    "1d": ("TBD", "N.N."),
     "1e": ("Rythmik schafft Beziehung", "Monika Mayr"),
     "1f": ("Kooperation von Musikschulen und Alteneinrichtungen", "Markus Adam"),
     "1g": ("Update Musik und Gehirn", "Prof. Artur C. Jaschke"),
@@ -55,7 +54,7 @@ code: |
     "2g": ("Saturday Night Fever – (nicht nur) für jüngere Pflegebedürftige", "Dr. Kerstin Jaunich"),
     "3a": ("Musikalische Stimulation für Menschen mit schwerer Demenz", "Mirjam Blümel"),
     "3b": ("Singen mit demenzerkrankten Menschen", "Prof. Dr. Kai Koch"),
-    "3d": ("Im Spannungsfeld Therapie – Geragogik – Kunst", "Prof. Dr. Dorothea Muthesius"),
+    "3g": ("Im Spannungsfeld Therapie – Geragogik – Kunst", "Prof. Dr. Dorothea Muthesius"),
     "4g": ("Musik macht einen Unterschied! – Wirkungen von Musik", "Dr. Arthur Schall")
   }
   workshops["2a"] = workshops["1a"]
@@ -67,7 +66,6 @@ code: |
   workshops["4a"] = workshops["3a"]
   workshops["4b"] = workshops["3b"]
   workshops["4c"] = workshops["2c"]
-  workshops["4d"] = workshops["1d"]
   workshops["4e"] = workshops["1e"]
   workshops["4f"] = workshops["2g"]
 ---
@@ -99,12 +97,12 @@ fields:
       ### Workshop Block 1
       
       Der erste Workshop-Block findet am Freitag, 16. September von 14:00 Uhr
-      bis 14:15 Uhr statt.
+      bis 15:15 Uhr statt.
   - Workshop Block 1: workshop1
     required: false
     input type: dropdown
     code: |
-      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("1")}
+      {key: f"{key}: {title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("1")}
   - note: |
       ### Workshop Block 2
       
@@ -114,7 +112,7 @@ fields:
     required: false
     input type: dropdown
     code: |
-      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("2")}
+      {key: f"{key}: {title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("2")}
   - note: |
       ### Workshop Block 3
       
@@ -124,7 +122,7 @@ fields:
     required: false
     input type: dropdown
     code: |
-      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("3")}
+      {key: f"{key}: {title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("3")}
   - note: |
       ### Workshop Block 4
       
@@ -134,7 +132,7 @@ fields:
     required: false
     input type: dropdown
     code: |
-      {key: f"{title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("4")}
+      {key: f"{key}: {title} (mit {speaker})" for key, (title, speaker) in workshops.items() if key.startswith("4")}
 continue button label: Absenden
 ---
 need:
@@ -145,10 +143,10 @@ code: |
   data = {
     "Name": person.name.full(),
     "E-Mail": person.email,
-    "Workshop 1": workshops[workshop1][0],
-    "Workshop 2": workshops[workshop2][0],
-    "Workshop 3": workshops[workshop3][0],
-    "Workshop 4": workshops[workshop4][0],
+    "Workshop 1": workshop1,
+    "Workshop 2": workshop2,
+    "Workshop 3": workshop3,
+    "Workshop 4": workshop4,
     "Anmeldedatum": current_datetime(timezone="Europe/Berlin").format_datetime('d.M.YYYY HH:mm'),
   }
   response = msgraph.add_table_data(
