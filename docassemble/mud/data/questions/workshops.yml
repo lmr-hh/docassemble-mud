@@ -138,7 +138,8 @@ continue button label: Absenden
 need:
   - msgraph
   - mailgun
-  - confirmation_email
+  - confirmation_email.content
+  - workshops
 code: |
   data = {
     "Name": person.name.full(),
