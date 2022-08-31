@@ -139,6 +139,7 @@ need:
   - msgraph
   - mailgun
   - confirmation_email
+  - person
 code: |
   data = {
     "Name": person.name.full(),
