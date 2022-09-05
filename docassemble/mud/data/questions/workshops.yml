@@ -44,21 +44,23 @@ code: |
     "1a": ("Musik in der Pflege", "Silke Kammer"),
     "1b": ("Kommunikationspuppen in der musikalischen Betreuung", "Martina Klimpel"),
     "1c": ("Musikunterricht für ältere Erwachsene", "Dr. Sibylle Hoedt-Schmidt"),
+    "1d": ("Musiktherapie in der geriatrischen Pflege", "Judith Stritzker"),
     "1e": ("Rythmik schafft Beziehung", "Monika Mayr"),
     "1f": ("Kooperation von Musikschulen und Alteneinrichtungen", "Markus Adam"),
     "1g": ("Update Musik und Gehirn", "Prof. Artur C. Jaschke"),
     "2c": ("Liederschreiben für und mit Menschen mit einer Demenz", "Jasmin Eickholt"),
-    "2d": ("Musiktherapie in der geriatrischen Pflege", "Judith Stritzker"),
     "2e": ("Interaktive Konzerte gegen soziale Isolation", "Isabelle Vilmar"),
     "2f": ("Anwendung der Vibroakustik-Therapie für Demenz", "Dr. Elsa Campbell"),
     "2g": ("Saturday Night Fever – (nicht nur) für jüngere Pflegebedürftige", "Dr. Kerstin Jaunich"),
     "3a": ("Musikalische Stimulation für Menschen mit schwerer Demenz", "Mirjam Blümel"),
     "3b": ("Singen mit demenzerkrankten Menschen", "Prof. Dr. Kai Koch"),
+    "3d": ("Musik im Alter – Migration und Interkulturalität", "Imke Ortmann"),
     "3g": ("Im Spannungsfeld Therapie – Geragogik – Kunst", "Prof. Dr. Dorothea Muthesius"),
     "4g": ("Musik macht einen Unterschied! – Wirkungen von Musik", "Dr. Arthur Schall")
   }
   workshops["2a"] = workshops["1a"]
   workshops["2b"] = workshops["1b"]
+  workshops["2d"] = workshops["1d"]
   workshops["3c"] = workshops["1c"]
   workshops["3d"] = workshops["2d"]
   workshops["3e"] = workshops["2e"]
@@ -66,6 +68,7 @@ code: |
   workshops["4a"] = workshops["3a"]
   workshops["4b"] = workshops["3b"]
   workshops["4c"] = workshops["2c"]
+  workshops["4d"] = workshops["3d"]
   workshops["4e"] = workshops["1e"]
   workshops["4f"] = workshops["2g"]
 ---
