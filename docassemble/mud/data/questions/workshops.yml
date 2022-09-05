@@ -62,7 +62,6 @@ code: |
   workshops["2b"] = workshops["1b"]
   workshops["2d"] = workshops["1d"]
   workshops["3c"] = workshops["1c"]
-  workshops["3d"] = workshops["2d"]
   workshops["3e"] = workshops["2e"]
   workshops["3f"] = workshops["1f"]
   workshops["4a"] = workshops["3a"]
