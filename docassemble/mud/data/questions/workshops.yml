@@ -71,6 +71,16 @@ code: |
   workshops["4e"] = workshops["1e"]
   workshops["4f"] = workshops["2g"]
 ---
+mandatory: true
+event: Anmeldefrist
+question: Anmeldefrist abgelaufen
+subquestion: |
+  Wir freuen uns über Ihr Interesse an der Fachtagung Musik und Demenz Online.
+  Leider ist die Anmeldefrist zur Teilnahme an der Tagung abgelaufen. Sie
+  erhalten alle weiteren Informationen per E-Mail.
+buttons:
+  - Ende: exit
+---
 question: Workshopauswahl für die Fachtagung Musik und Demenz
 pre: |
   [FILE mud.jpg, 100%, Musik und Demenz Banner]
